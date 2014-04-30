@@ -222,7 +222,7 @@
       this.on('cancel', function() {
         self.close();
       });
-
+      this.isClosed = false;
       Modal.count++;
 
       //Run callback on OK if provided
@@ -261,7 +261,7 @@
       });
 
       $el.modal('hide');
-
+      this.isClosed = true;
       Modal.count--;
     },
 
