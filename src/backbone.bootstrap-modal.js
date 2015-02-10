@@ -132,6 +132,16 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         template: template,
         enterTriggersOk: false
       }, options);
+      var self = this;
+      this.$el.one('hidden.bs.modal', function onHidden(e) {
+        // Ignore events propagated from interior objects, like bootstrap tooltips
+        if(e.target !== e.currentTarget){
+          return $el.one('hidden', onHidden);
+        }
+        self.remove();
+
+        self.trigger('cancel');
+      });
     },
 
     /**
@@ -245,20 +255,6 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         this._preventClose = false;
         return;
       }
-
-      $el.one('hidden.bs.modal', function onHidden(e) {
-        // Ignore events propagated from interior objects, like bootstrap tooltips
-        if(e.target !== e.currentTarget){
-          return $el.one('hidden', onHidden);
-        }
-        self.remove();
-
-        if (self.options.content && self.options.content.trigger) {
-          self.options.content.trigger('hidden', self);
-        }
-
-        self.trigger('hidden');
-      });
 
       $el.modal('hide');
       this.isClosed = true;
