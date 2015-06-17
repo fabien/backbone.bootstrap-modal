@@ -258,7 +258,9 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
 
       $el.modal('hide');
       this.isClosed = true;
-      Modal.count--;
+      if (Modal.count > 0) {
+        Modal.count--;
+      }
     },
 
     /**
