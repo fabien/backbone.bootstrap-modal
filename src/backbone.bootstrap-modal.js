@@ -36,12 +36,12 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
     <% if (showFooter) { %>\
       <div class="modal-footer">\
         <% if (allowDelete && deleteText) { %>\
-            <button type="button" class="btn btn-danger pull-left delete">{{deleteText}}</button>\
+            <button type="button" class="btn delete {{deleteClass}} pull-left">{{deleteText}}</button>\
         <% } %>\
         <% if (allowCancel && cancelText) { %>\
-          <button class="btn cancel">{{cancelText}}</button>\
+          <button class="btn cancel {{cancelClass}}">{{cancelText}}</button>\
         <% } %>\
-        <button class="btn ok btn-primary">{{okText}}</button>\
+        <button class="btn ok {{okClass}}">{{okText}}</button>\
       </div>\
     <% } %>\
     </div></div>\
@@ -143,6 +143,9 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         showFooter: true,
         allowCancel: true,
         allowDelete: false,
+        okClass: 'btn-primary',
+        cancelClass: 'btn-default',
+        deleteClass: 'btn-danger',
         escape: true,
         animate: false,
         template: template,
