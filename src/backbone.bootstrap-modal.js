@@ -10,6 +10,7 @@
  * shown: Fired when the modal has finished animating in
  * hidden: Fired when the modal has finished animating out
  * cancel: The user dismissed the modal
+ * delete: The user clicked Delete
  * ok: The user clicked OK
  */
 define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbone) {
@@ -34,12 +35,13 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
     <div class="modal-body">{{content}}</div>\
     <% if (showFooter) { %>\
       <div class="modal-footer">\
-        <% if (allowCancel) { %>\
-          <% if (cancelText) { %>\
-            <a href="#" class="btn cancel">{{cancelText}}</a>\
-          <% } %>\
+        <% if (allowCancel && cancelText) { %>\
+          <button class="btn cancel">{{cancelText}}</button>\
         <% } %>\
-        <a href="#" class="btn ok btn-primary">{{okText}}</a>\
+        <% if (allowDelete && deleteText) { %>\
+            <button type="button" class="btn btn-danger pull-left delete">{{deleteText}}</button>\
+        <% } %>\
+        <button  class="btn ok btn-primary">{{okText}}</button>\
       </div>\
     <% } %>\
     </div></div>\
@@ -47,7 +49,6 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
 
   //Reset to users' template settings
   _.templateSettings = _interpolateBackup;
-
 
   var Modal = Backbone.View.extend({
 
@@ -79,6 +80,19 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
 
         if (this.options.content && this.options.content.trigger) {
           this.options.content.trigger('ok', this);
+        }
+
+        if (this.options.okCloses) {
+          this.close();
+        }
+      },
+      'click .delete': function (event) {
+        event.preventDefault();
+
+        this.trigger('delete');
+
+        if (this.options.content && this.options.content.trigger) {
+          this.options.content.trigger('delete', this);
         }
 
         if (this.options.okCloses) {
@@ -125,8 +139,10 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         focusOk: true,
         okCloses: true,
         cancelText: 'Cancel',
+        deleteText: 'Delete',
         showFooter: true,
         allowCancel: true,
+        allowDelete: false,
         escape: true,
         animate: false,
         template: template,
@@ -175,9 +191,9 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
     /**
      * Renders and shows the modal
      *
-     * @param {Function} [cb]     Optional callback that runs only when OK is pressed.
+     * @param {Function} [okCb, cancelCb] Optional callback that runs only when OK is pressed.
      */
-    open: function(cb) {
+    open: function(okCb, cancelCb) {
       if (!this.isRendered) this.render();
 
       var self = this,
@@ -235,10 +251,9 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
       this.isClosed = false;
       Modal.count++;
 
-      //Run callback on OK if provided
-      if (cb) {
-        self.on('ok', cb);
-      }
+      //Run callbacks if provided
+      if (okCb) self.on('ok', okCb);
+      if (cancelCb) self.on('cancel', cancelCb);
 
       return this;
     },
