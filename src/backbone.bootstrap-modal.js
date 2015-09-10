@@ -279,6 +279,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
       if (Modal.count > 0) {
         Modal.count--;
       }
+      this.trigger('close');
     },
 
     /**
