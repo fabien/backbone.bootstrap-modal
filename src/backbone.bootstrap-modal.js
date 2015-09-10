@@ -83,7 +83,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         }
 
         if (this.options.okCloses) {
-          this.close();
+          this.close('ok');
         }
       },
       'click .delete': function (event) {
@@ -96,7 +96,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         }
 
         if (this.options.okCloses) {
-          this.close();
+          this.close('delete');
         }
       },
       'keypress': function(event) {
@@ -110,7 +110,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
           }
 
           if (this.options.okCloses) {
-            this.close();
+            this.close('ok');
           }
         }
       }
@@ -249,7 +249,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
       }
 
       this.on('cancel', function() {
-        self.close();
+        self.close('cancel');
       });
       this.isClosed = false;
       Modal.count++;
@@ -264,7 +264,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
     /**
      * Closes the modal
      */
-    close: function() {
+    close: function(action) {
       var self = this,
           $el = this.$el;
 
@@ -279,7 +279,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
       if (Modal.count > 0) {
         Modal.count--;
       }
-      this.trigger('close');
+      this.trigger('close', action);
     },
 
     /**
