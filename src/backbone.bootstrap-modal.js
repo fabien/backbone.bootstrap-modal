@@ -23,7 +23,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
   };
 
   var template = _.template('\
-    <div class="modal-dialog"><div class="modal-content">\
+    <div id="{{id}}" class="modal-dialog"><div class="modal-content">\
     <% if (title) { %>\
       <div class="modal-header">\
         <% if (allowCancel) { %>\
@@ -134,6 +134,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
      */
     initialize: function(options) {
       this.options = _.extend({
+        id: 'dialog-' + this.cid,
         title: null,
         okText: 'OK',
         focusOk: true,
@@ -269,7 +270,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
           $el = this.$el;
 
       //Check if the modal should stay open
-      if (this._preventClose) {
+      if (this._preventClose || this.isClosed) {
         this._preventClose = false;
         return;
       }
