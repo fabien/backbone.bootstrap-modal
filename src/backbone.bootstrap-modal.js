@@ -160,7 +160,7 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         }
         self.remove();
 
-        self.trigger('cancel');
+        if (!self.isClosed) self.trigger('cancel');
       });
     },
 
