@@ -100,7 +100,8 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
         }
       },
       'keypress': function(event) {
-        if (this.options.enterTriggersOk && event.which == 13) {
+        if (this.options.enterTriggersOk && event.which == 13
+          && $(event.target).is(':not(textarea)')) {
           event.preventDefault();
 
           this.trigger('ok');
