@@ -101,7 +101,8 @@ define(['jquery', 'underscore', 'backbone', 'bootstrap'], function($, _, Backbon
       },
       'keypress': function(event) {
         if (this.options.enterTriggersOk && event.which == 13
-          && $(event.target).is(':not(textarea)')) {
+          && $(event.target).is(':not(textarea)')
+          && !$(event.target).prop('contenteditable')) {
           event.preventDefault();
 
           this.trigger('ok');
